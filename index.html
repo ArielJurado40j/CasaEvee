@@ -25,7 +25,11 @@
 </head>
 <body>
 
-<div class="strip">Hacé tu pedido acá y lo coordinamos por WhatsApp · Pagás por transferencia o en efectivo</div>
+<div class="strip">
+  <span id="stripTexto">Hacé tu pedido acá y lo coordinamos por WhatsApp · Pagás por transferencia o en efectivo</span>
+  <a id="linkLogin" href="#login">Iniciar sesión</a>
+  <button id="btnSalir" type="button" hidden>Cerrar sesión</button>
+</div>
 
 <header class="site">
   <div class="wrap">
@@ -59,6 +63,26 @@
     </div>
   </section>
 
+  <!-- Inicio de sesión SIMULADO (solo demostración académica) -->
+  <section class="info" id="login" aria-labelledby="t-login" data-policy="P1 · control de acceso por rol (simulación)">
+    <div class="wrap">
+      <h2 id="t-login">Iniciar sesión</h2>
+      <p>Ingresá con tu cuenta para poder hacer pedidos.</p>
+      <form id="formLogin" class="box login-box" novalidate>
+        <div class="field">
+          <label class="l" for="loginCorreo">Correo electrónico</label>
+          <input id="loginCorreo" type="email" maxlength="60" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label class="l" for="loginClave">Contraseña</label>
+          <input id="loginClave" type="password" maxlength="40" autocomplete="current-password" required>
+        </div>
+        <p id="loginMsg" role="alert"></p>
+        <button class="btn" type="submit">Ingresar</button>
+      </form>
+    </div>
+  </section>
+
   <div class="wrap shop">
     <section id="catalogo" aria-labelledby="t-cat">
       <h2 id="t-cat">Productos</h2>
@@ -69,6 +93,7 @@
 
     <aside class="cart" id="pedido" aria-labelledby="t-ped" data-policy="P3 · stock validado al armar el pedido">
       <h2 id="t-ped">Tu pedido</h2>
+      <p class="estado" id="estadoCompra"></p>
       <ul class="lines" id="lineas"></ul>
       <p class="empty" id="pedidoVacio">Todavía no agregaste productos.</p>
       <div class="total"><span>Total</span><span id="total">$0</span></div>
@@ -150,14 +175,14 @@
       </div>
       <div>
         <h3>Atención</h3>
-        <p>Lunes a viernes 07:00 a 12:00 - 17:30 a 21:00</p>
+        <p>Lunes a viernes 07:00 a 12:00 </p>
         <p>WhatsApp: <span id="waTexto">+54 3888548007</span></p>
       </div>
       <div>
         <h3>Sitio</h3>
         <p data-policy="P4 · HTTPS"><span class="lock">Conexión segura (HTTPS)</span></p>
         <p style="margin-top:10px"><a href="#" data-policy="P1 · panel del comercio con cuenta individual y MFA" onclick="return false">Acceso del comercio</a></p>
-        <p>Sitio creado por Gutierrez, Jurado, Ontiveros Trabajo Práctico de Seguridad Informática.</p>
+        <p>Sitio web creado por Gutierrez Alvaro, Jurado Ariel, Ontiveros Guillermo</p>
       </div>
     </div>
   </div>
@@ -166,7 +191,7 @@
 <button id="toggle" class="btn sec" type="button" aria-pressed="false">Ver políticas aplicadas</button>
 
 <script>
-  // ---------- Datos de ejemplo (en un sitio real vendrían de la base de datos) ----------
+  // ---------- Datos de ejemplo nada mas (en una pagina real iria la base de datos conectada con php) ----------
   // "unidades" = cuánto stock consume cada modalidad (el stock está en la unidad base).
   var PRODUCTOS = [
     { id: 1, nombre: "Caja desechable mediana", cat: "Descartables", desc: "Ideal para delivery y viandas.", stock: 120,
@@ -183,7 +208,7 @@
       mods: [{ t: "Unidad", precio: 350, unidades: 1 }, { t: "Caja x12", precio: 3900, unidades: 12 }] },
     { id: 7, nombre: "Cartulina de colores", cat: "Manualidades", desc: "Varios colores, tamaño carta.", stock: 40,
       mods: [{ t: "Unidad", precio: 400, unidades: 1 }, { t: "Paquete x10", precio: 3500, unidades: 10 }] },
-    { id: 8, nombre: "Cinta Raso", cat: "Manualidades", desc: "Suelta, se vende por metro.", stock: 25,
+    { id: 8, nombre: "Goma eva", cat: "Manualidades", desc: "Lisa, se vende por metro.", stock: 25,
       mods: [{ t: "Medio metro", precio: 1000, unidades: 0.5 }, { t: "Metro", precio: 1900, unidades: 1 }] }
   ];
   var STOCK_BAJO = 15;                 // umbral definido por el comercio (Política 3)
@@ -263,6 +288,7 @@
 
   // ---------- Pedido ----------
   function agregar(pid, mi) {
+    if (!verificarCompra()) return;                   // sesión: solo un cliente puede comprar
     var p = PRODUCTOS.filter(function (x) { return x.id === pid; })[0];
     var u = p.mods[mi].unidades;
     if (disponible(p) < u) { aviso("No hay stock suficiente de “" + p.nombre + "” en esa modalidad.", false); return; }
@@ -314,6 +340,7 @@
   // ---------- Envío a WhatsApp ----------
   $("form").addEventListener("submit", function (e) {
     e.preventDefault();
+    if (!verificarCompra()) return;                   // sesión: solo un cliente puede comprar
     if ($("web").value) return;                       // campo trampa: si un bot lo completa, se ignora
     var nombre = $("nombre").value.trim();
     var tel = $("tel").value.trim();
@@ -337,7 +364,7 @@
     aviso("Listo: se abrió WhatsApp con tu pedido. Revisalo y envialo.", true);
   });
 
-  // ---------- FILTROS Y BUSQUEDAS ----------
+  // ---------- Filtros y búsqueda ----------
   $("cats").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-cat]");
     if (!b) return;
@@ -349,12 +376,76 @@
   });
   $("buscar").addEventListener("input", function (e) { texto = e.target.value; pintarCatalogo(); });
 
-  // ---------- EL BOTÓN PARA VER LAS POLITICAS ----------
+  // ---------- Modo exposición ----------
   $("toggle").addEventListener("click", function () {
     var on = document.body.classList.toggle("anotar");
     $("toggle").setAttribute("aria-pressed", on ? "true" : "false");
     $("toggle").textContent = on ? "Ocultar políticas" : "Ver políticas aplicadas";
   });
+
+  pintarTodo();
+</script>
+
+<script>
+  // ---------- SIMULACIÓN de inicio de sesión (demostración académica) ----------
+  // ATENCIÓN: las cuentas están escritas en el código y son visibles para cualquiera.
+  // Esto NO es un sistema de autenticación seguro. En un sitio real, las contraseñas
+  // se guardarían con hash en el servidor (Política 1) y la sesión se validaría allí.
+  var CUENTAS = [
+    { correo: "ariel@gmail.com",  clave: "123456", rol: "administrador" },
+    { correo: "alvaro@gmail.com", clave: "123456", rol: "cliente" }
+  ];
+  var sesion = null;                   // null = visitante; si no, la cuenta que inició sesión
+  var TEXTO_VISITANTE = $("stripTexto").textContent;   // texto habitual de la franja superior
+
+  // Muestra en pantalla lo que corresponde al estado actual de la sesión
+  function actualizarSesion() {
+    var rol = sesion ? sesion.rol : "";
+    $("stripTexto").textContent = rol === "administrador" ? "Sesión iniciada como administrador"
+                                : rol === "cliente" ? "Sesión iniciada como cliente"
+                                : TEXTO_VISITANTE;
+    $("linkLogin").hidden = !!sesion;
+    $("btnSalir").hidden = !sesion;
+    $("login").hidden = !!sesion;
+    $("enviar").disabled = rol === "administrador";   // el administrador no compra como cliente
+
+    var estado = $("estadoCompra");
+    estado.hidden = rol === "cliente";
+    estado.textContent = rol === "administrador" ? "Estás como administrador: la compra está deshabilitada."
+                                                 : "Iniciá sesión para poder hacer tu pedido.";
+  }
+
+  // Devuelve true solo si hay un cliente con sesión iniciada
+  function verificarCompra() {
+    if (!sesion) { aviso("Primero tenés que iniciar sesión para comprar.", false); return false; }
+    if (sesion.rol !== "cliente") { aviso("El administrador no puede comprar como cliente.", false); return false; }
+    return true;
+  }
+
+  $("formLogin").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var correo = $("loginCorreo").value.trim().toLowerCase();
+    var clave = $("loginClave").value;
+    var cuenta = CUENTAS.filter(function (c) { return c.correo === correo && c.clave === clave; })[0];
+    if (!cuenta) { $("loginMsg").textContent = "Las credenciales no son válidas."; return; }
+    sesion = cuenta;
+    $("loginMsg").textContent = "";
+    $("formLogin").reset();
+    aviso("", true);
+    actualizarSesion();
+  });
+
+  $("btnSalir").addEventListener("click", function () {
+    sesion = null;
+    aviso("", true);
+    actualizarSesion();
+  });
+
+  actualizarSesion();
+</script>
+</body>
+</html>
+
 
   pintarTodo();
 </script>
