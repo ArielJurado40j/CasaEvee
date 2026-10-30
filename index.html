@@ -21,138 +21,7 @@
   Botón "Ver políticas aplicadas" (abajo a la izquierda): marca en la página qué elemento
   corresponde a cada política. Es solo para exponer; en el sitio real no existiría.
 -->
-<style>
-  :root {
-    --ink: #1b2a49;
-    --muted: #55627d;
-    --bg: #f6f8fc;
-    --card: #ffffff;
-    --line: #d5deea;
-    --mark: #ffe680;
-    --red: #d9534f;
-    --ok: #2e7d5b;
-    --warn: #b36b00;
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; line-height: 1.2; margin: 0; }
-  a { color: inherit; }
-  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-    outline: 3px solid var(--red); outline-offset: 2px;
-  }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
-  .btn {
-    display: inline-block; border: 0; border-radius: 6px; padding: 10px 16px; font: inherit; font-weight: 600;
-    background: var(--ink); color: #fff; cursor: pointer; text-decoration: none;
-  }
-  .btn:hover { background: #26396a; }
-  .btn:disabled { background: #9aa6bd; cursor: not-allowed; }
-  .btn.sec { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
-  .btn.sec:hover { background: #e9eef8; }
-  .btn.wa { background: #1f7a4d; }
-  .btn.wa:hover { background: #18623e; }
-
-  /* Franja superior */
-  .strip { background: var(--ink); color: #fff; font-size: .9rem; padding: 6px 0; text-align: center; }
-
-  /* Encabezado */
-  header.site { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
-  .bar { display: flex; align-items: center; gap: 16px; padding: 12px 0; flex-wrap: wrap; }
-  .logo { font-family: Georgia, serif; font-size: 1.6rem; font-weight: 700; text-decoration: none; }
-  .logo span { background: var(--mark); padding: 0 6px; }
-  .search { flex: 1 1 240px; }
-  .search input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
-  .cartlink { text-decoration: none; font-weight: 600; padding: 8px 12px; border: 1px solid var(--ink); border-radius: 6px; }
-  .cartlink b { background: var(--red); color: #fff; border-radius: 999px; padding: 0 8px; margin-left: 4px; }
-  nav.cats { display: flex; gap: 8px; flex-wrap: wrap; padding-bottom: 12px; }
-  nav.cats button, nav.cats a {
-    border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 14px;
-    font: inherit; cursor: pointer; text-decoration: none; color: var(--ink);
-  }
-  nav.cats button[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
-
-  /* Portada */
-  .hero { padding: 40px 0 24px; }
-  .hero h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); max-width: 18ch; }
-  .hero p { max-width: 58ch; color: var(--muted); font-size: 1.1rem; margin: 12px 0 18px; }
-  .hero .btns { display: flex; gap: 10px; flex-wrap: wrap; }
-
-  /* Tienda */
-  .shop { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; padding-bottom: 40px; }
-  @media (max-width: 900px) { .shop { grid-template-columns: 1fr; } }
-  .shop h2 { font-size: 1.5rem; margin-bottom: 14px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-  .ph {
-    height: 120px; border-radius: 6px; display: grid; place-items: center; color: var(--muted); font-size: .85rem;
-    background: repeating-linear-gradient(45deg, #eef2f9, #eef2f9 10px, #e5ebf5 10px, #e5ebf5 20px);
-  }
-  .card .cat { font-size: .8rem; color: var(--muted); }
-  .card h3 { font-size: 1.05rem; }
-  .card p { margin: 0; font-size: .9rem; color: var(--muted); }
-  .card label { font-size: .85rem; font-weight: 600; display: block; }
-  .card select { width: 100%; padding: 7px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
-  .price { font-size: 1.35rem; font-weight: 700; }
-  .badge { display: inline-block; font-size: .8rem; font-weight: 600; border-radius: 4px; padding: 2px 8px; }
-  .badge.ok { background: #dff3e8; color: var(--ok); }
-  .badge.low { background: #ffe9c2; color: var(--warn); }
-  .badge.out { background: #f7d4d1; color: #9c2f2b; }
-  .empty { color: var(--muted); padding: 20px 0; }
-
-  /* Pedido */
-  aside.cart { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px; position: sticky; top: 150px; }
-  @media (max-width: 900px) { aside.cart { position: static; } }
-  aside.cart h2 { font-size: 1.3rem; margin-bottom: 10px; }
-  .lines { list-style: none; padding: 0; margin: 0 0 10px; }
-  .lines li { border-bottom: 1px solid var(--line); padding: 8px 0; font-size: .92rem; }
-  .lines .t { font-weight: 600; }
-  .lines .m { color: var(--muted); font-size: .85rem; }
-  .lines .r { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-  .lines .r button { border: 1px solid var(--line); background: #fff; border-radius: 4px; width: 28px; height: 28px; cursor: pointer; font: inherit; }
-  .lines .r .sub { margin-left: auto; font-weight: 600; }
-  .lines .r .del { width: auto; padding: 0 8px; font-size: .8rem; }
-  .total { display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
-  form .field { margin-bottom: 10px; }
-  form label.l { display: block; font-weight: 600; font-size: .88rem; margin-bottom: 2px; }
-  form input[type=text], form input[type=tel], form textarea {
-    width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; font: inherit;
-  }
-  form .hint { font-size: .8rem; color: var(--muted); }
-  .consent { display: flex; gap: 8px; align-items: flex-start; font-size: .85rem; }
-  .consent input { margin-top: 4px; }
-  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-  #msg { min-height: 1.4em; font-size: .88rem; color: #9c2f2b; margin: 6px 0; }
-  #msg.ok { color: var(--ok); }
-
-  /* Secciones de contenido */
-  section.info { padding: 36px 0; border-top: 1px solid var(--line); background: var(--card); }
-  section.info h2 { font-size: 1.6rem; margin-bottom: 12px; }
-  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-  .box { border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; background: var(--bg); }
-  .box h3 { font-size: 1.05rem; margin-bottom: 4px; }
-  .box p { margin: 0; color: var(--muted); font-size: .95rem; }
-  section.info ol, section.info ul { padding-left: 1.2rem; margin: 6px 0; }
-  details { border: 1px solid var(--line); border-radius: 6px; padding: 0 14px; margin-top: 8px; background: var(--bg); }
-  summary { cursor: pointer; padding: 10px 0; font-weight: 600; }
-  details p { margin: 0 0 10px; }
-
-  /* Pie */
-  footer.site { background: var(--ink); color: #dfe6f5; padding: 28px 0; font-size: .92rem; }
-  footer.site .cols { gap: 24px; }
-  footer.site h3 { color: #fff; font-size: 1.05rem; margin-bottom: 6px; }
-  footer.site p { margin: 0 0 4px; }
-  .lock { display: inline-block; background: #254a3a; color: #bfe9d3; border-radius: 4px; padding: 2px 8px; font-size: .82rem; }
-
-  /* Modo exposición: muestra qué política aplica */
-  #toggle { position: fixed; left: 16px; bottom: 16px; z-index: 50; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
-  body.anotar [data-policy] { outline: 2px dashed var(--red); outline-offset: 4px; position: relative; }
-  body.anotar [data-policy]::before {
-    content: attr(data-policy); position: absolute; top: -13px; left: 6px; z-index: 30;
-    background: var(--red); color: #fff; font: 600 11px/1.5 system-ui, sans-serif; padding: 0 6px; border-radius: 3px; white-space: nowrap;
-  }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -277,24 +146,24 @@
       <div>
         <h3>Casa Evee</h3>
         <p>Librería, descartables e impresión.</p>
-        <p>Dirección del local (completar)</p>
+        <p>Rogelio Leach 52</p>
       </div>
       <div>
         <h3>Atención</h3>
-        <p>Lunes a viernes, 9 a 18 h (ejemplo)</p>
+        <p>Lunes a viernes 07:00 a 12:00 - 17:30 a 21:00</p>
         <p>WhatsApp: <span id="waTexto">+54 3888548007</span></p>
       </div>
       <div>
         <h3>Sitio</h3>
         <p data-policy="P4 · HTTPS"><span class="lock">Conexión segura (HTTPS)</span></p>
         <p style="margin-top:10px"><a href="#" data-policy="P1 · panel del comercio con cuenta individual y MFA" onclick="return false">Acceso del comercio</a></p>
-        <p>Sitio de ejemplo para un trabajo práctico.</p>
+        <p>Sitio creado por Gutierrez, Jurado, Ontiveros Trabajo Práctico de Seguridad Informática.</p>
       </div>
     </div>
   </div>
 </footer>
 
-<button id="toggle" class="btn sec" type="button" aria-pressed="false" style="background:#fff">Ver políticas aplicadas</button>
+<button id="toggle" class="btn sec" type="button" aria-pressed="false">Ver políticas aplicadas</button>
 
 <script>
   // ---------- Datos de ejemplo (en un sitio real vendrían de la base de datos) ----------
@@ -314,7 +183,7 @@
       mods: [{ t: "Unidad", precio: 350, unidades: 1 }, { t: "Caja x12", precio: 3900, unidades: 12 }] },
     { id: 7, nombre: "Cartulina de colores", cat: "Manualidades", desc: "Varios colores, tamaño carta.", stock: 40,
       mods: [{ t: "Unidad", precio: 400, unidades: 1 }, { t: "Paquete x10", precio: 3500, unidades: 10 }] },
-    { id: 8, nombre: "Goma eva", cat: "Manualidades", desc: "Lisa, se vende por metro.", stock: 25,
+    { id: 8, nombre: "Cinta Raso", cat: "Manualidades", desc: "Suelta, se vende por metro.", stock: 25,
       mods: [{ t: "Medio metro", precio: 1000, unidades: 0.5 }, { t: "Metro", precio: 1900, unidades: 1 }] }
   ];
   var STOCK_BAJO = 15;                 // umbral definido por el comercio (Política 3)
@@ -468,7 +337,7 @@
     aviso("Listo: se abrió WhatsApp con tu pedido. Revisalo y envialo.", true);
   });
 
-  // ---------- Filtros y búsqueda ----------
+  // ---------- FILTROS Y BUSQUEDAS ----------
   $("cats").addEventListener("click", function (e) {
     var b = e.target.closest("button[data-cat]");
     if (!b) return;
@@ -480,7 +349,7 @@
   });
   $("buscar").addEventListener("input", function (e) { texto = e.target.value; pintarCatalogo(); });
 
-  // ---------- Modo exposición ----------
+  // ---------- EL BOTÓN PARA VER LAS POLITICAS ----------
   $("toggle").addEventListener("click", function () {
     var on = document.body.classList.toggle("anotar");
     $("toggle").setAttribute("aria-pressed", on ? "true" : "false");
@@ -491,3 +360,4 @@
 </script>
 </body>
 </html>
+
