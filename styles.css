@@ -1,0 +1,148 @@
+/* =====================================================================
+   Casa Evee · estilos (diseño nuevo aplicado sobre la estructura original)
+   Los nombres de clases son los del HTML original; el JavaScript los usa.
+   ===================================================================== */
+
+/* ===== 1. VARIABLES (paleta del nuevo diseño) ===== */
+:root {
+  --ink: #22233a;            /* texto principal */
+  --noche: #1b1c2b;          /* fondos oscuros */
+  --muted: #6b6d80;          /* texto secundario (también lo usa un estilo en línea del HTML) */
+  --bg: #f6f6fb;             /* fondo de página */
+  --card: #ffffff;           /* tarjetas */
+  --line: #e4e4ee;           /* bordes */
+  --mark: #ecd5fb;           /* resalte del logo */
+  --magenta: #c13cf0;
+  --turquesa: #35d5b5;
+  --degradado: linear-gradient(90deg, var(--magenta), var(--turquesa));
+  --red: #c13cf0;            /* color del modo "ver políticas" */
+  --verde: #22c55e;
+  --ok: #0b7a62;
+  --warn: #8a5a00;
+  --radio: 14px;
+}
+
+/* ===== 2. BASE ===== */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 150px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif; }
+h1, h2, h3 { line-height: 1.2; margin: 0; font-weight: 700; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--magenta); outline-offset: 2px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+/* ===== 3. BOTONES ===== */
+.btn {
+  display: inline-block; border: 0; border-radius: 10px; padding: 10px 18px; font: inherit; font-weight: 600;
+  background: var(--degradado); color: #fff; cursor: pointer; text-decoration: none;
+}
+.btn:hover { filter: brightness(1.07); }
+.btn:disabled { background: #c9cadb; filter: none; cursor: not-allowed; }
+.btn.sec { background: var(--card); color: var(--ink); border: 1px solid var(--magenta); }
+.btn.sec:hover { background: #f8ecfe; filter: none; }
+.btn.wa { background: var(--verde); }
+
+/* ===== 4. FRANJA SUPERIOR Y ENCABEZADO ===== */
+.strip { background: var(--noche); color: #d9d9e6; font-size: .8rem; padding: 7px 0; text-align: center; }
+header.site { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+.bar { display: flex; align-items: center; gap: 16px; padding: 12px 0; flex-wrap: wrap; }
+.logo { font-size: 1.5rem; font-weight: 800; text-decoration: none; }
+.logo span { background: var(--degradado); color: #fff; padding: 0 10px; border-radius: 10px; }
+.search { flex: 1 1 240px; }
+.search input { width: 100%; padding: 10px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); font: inherit; }
+.cartlink { text-decoration: none; font-weight: 600; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; }
+.cartlink b { background: var(--degradado); color: #fff; border-radius: 999px; padding: 0 8px; margin-left: 4px; }
+nav.cats { display: flex; gap: 8px; flex-wrap: wrap; padding-bottom: 12px; }
+nav.cats button, nav.cats a {
+  border: 0; background: transparent; border-radius: 999px; padding: 6px 16px;
+  font: inherit; font-size: .9rem; font-weight: 500; cursor: pointer; text-decoration: none; color: var(--ink);
+}
+nav.cats button:hover, nav.cats a:hover { background: var(--bg); color: var(--magenta); }
+nav.cats button[aria-pressed="true"] { background: var(--degradado); color: #fff; }
+
+/* ===== 5. PORTADA ===== */
+.hero { padding: 48px 0 36px; background: radial-gradient(circle at 85% 20%, #ffe9a8 0, transparent 28%), linear-gradient(120deg, #f7e4ff, #e3f7f3 60%, #fff3da); }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; max-width: 18ch; }
+.hero p { max-width: 58ch; color: var(--muted); font-size: 1.05rem; margin: 14px 0 20px; }
+.hero .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ===== 6. TIENDA (catálogo) ===== */
+.shop { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; padding: 32px 20px 40px; }
+@media (max-width: 900px) { .shop { grid-template-columns: 1fr; } }
+.shop h2 { font-size: 1.6rem; margin-bottom: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radio); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.ph {
+  height: 120px; border-radius: 10px; display: grid; place-items: center; color: var(--muted); font-size: .85rem;
+  background: linear-gradient(135deg, #f1e3fb, #dff6f1);
+}
+.card .cat { font-size: .8rem; color: var(--magenta); font-weight: 600; }
+.card h3 { font-size: 1.05rem; }
+.card p { margin: 0; font-size: .9rem; color: var(--muted); }
+.card label { font-size: .85rem; font-weight: 600; display: block; }
+.card select { width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); font: inherit; }
+.price { font-size: 1.4rem; font-weight: 800; }
+.badge { display: inline-block; font-size: .78rem; font-weight: 600; border-radius: 999px; padding: 2px 10px; }
+.badge.ok { background: #e5f7f1; color: var(--ok); }
+.badge.low { background: #fff1d6; color: var(--warn); }
+.badge.out { background: #fde4ee; color: #a3194f; }
+.empty { color: var(--muted); padding: 20px 0; }
+
+/* ===== 7. PEDIDO (carrito y formulario) ===== */
+aside.cart { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; position: sticky; top: 150px; }
+@media (max-width: 900px) { aside.cart { position: static; } }
+aside.cart h2 { font-size: 1.3rem; margin-bottom: 10px; }
+.lines { list-style: none; padding: 0; margin: 0 0 10px; }
+.lines li { border-bottom: 1px solid var(--line); padding: 8px 0; font-size: .92rem; }
+.lines .t { font-weight: 600; }
+.lines .m { color: var(--muted); font-size: .85rem; }
+.lines .r { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.lines .r button { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; width: 28px; height: 28px; cursor: pointer; font: inherit; }
+.lines .r button:hover { border-color: var(--magenta); }
+.lines .r .sub { margin-left: auto; font-weight: 600; }
+.lines .r .del { width: auto; padding: 0 8px; font-size: .8rem; }
+.total { display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
+form .field { margin-bottom: 10px; }
+form label.l { display: block; font-weight: 600; font-size: .88rem; margin-bottom: 2px; }
+form input[type=text], form input[type=tel], form textarea {
+  width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); font: inherit;
+}
+form .hint { font-size: .8rem; color: var(--muted); }
+.consent { display: flex; gap: 8px; align-items: flex-start; font-size: .85rem; }
+.consent input { margin-top: 4px; accent-color: var(--magenta); }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+#msg { min-height: 1.4em; font-size: .88rem; color: #a3194f; margin: 6px 0; }
+#msg.ok { color: var(--ok); }
+
+/* ===== 8. SECCIONES DE CONTENIDO (impresión y privacidad) ===== */
+section.info { padding: 40px 0; border-top: 1px solid var(--line); background: var(--card); }
+section.info h2 { font-size: 1.7rem; margin-bottom: 12px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.box { border: 1px solid var(--line); border-radius: var(--radio); padding: 16px 18px; background: var(--bg); }
+.box h3 { font-size: 1.05rem; margin-bottom: 4px; }
+.box p { margin: 0; color: var(--muted); font-size: .95rem; }
+section.info ol, section.info ul { padding-left: 1.2rem; margin: 6px 0; }
+details { border: 1px solid var(--line); border-radius: 12px; padding: 0 16px; margin-top: 10px; background: var(--bg); }
+summary { cursor: pointer; padding: 10px 0; font-weight: 600; color: #7b1ba0; }
+details p { margin: 0 0 10px; }
+
+/* ===== 9. PIE DE PÁGINA ===== */
+footer.site { background: var(--noche); color: #c9c9da; padding: 32px 0; font-size: .9rem; }
+footer.site .cols { gap: 24px; }
+footer.site h3 { color: #fff; font-size: 1rem; margin-bottom: 6px; }
+footer.site p { margin: 0 0 4px; }
+footer.site a:hover { color: var(--turquesa); }
+.lock { display: inline-block; background: #17382f; color: #8ff0d6; border-radius: 999px; padding: 2px 10px; font-size: .82rem; }
+
+/* ===== 10. BOTÓN LATERAL "VER POLÍTICAS APLICADAS" Y MODO EXPOSICIÓN ===== */
+#toggle { position: fixed; left: 16px; bottom: 16px; z-index: 50; background: var(--verde); color: #fff; border: 0; border-radius: 999px; padding: 12px 20px; box-shadow: 0 6px 16px rgba(34, 197, 94, .4); }
+#toggle:hover { background: #16a34a; }
+#toggle[aria-pressed="true"] { background: var(--noche); box-shadow: 0 6px 16px rgba(27, 28, 43, .4); }
+body.anotar [data-policy] { outline: 2px dashed var(--red); outline-offset: 4px; position: relative; }
+body.anotar [data-policy]::before {
+  content: attr(data-policy); position: absolute; top: -13px; left: 6px; z-index: 30;
+  background: var(--red); color: #fff; font: 600 11px/1.5 "Segoe UI", system-ui, sans-serif; padding: 0 8px; border-radius: 999px; white-space: nowrap;
+}
