@@ -1,7 +1,4 @@
-/* =====================================================================
-   Casa Evee · estilos (diseño nuevo aplicado sobre la estructura original)
-   Los nombres de clases son los del HTML original; el JavaScript los usa.
-   ===================================================================== */
+
 
 /* ===== 1. VARIABLES (paleta del nuevo diseño) ===== */
 :root {
@@ -46,7 +43,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .btn.wa { background: var(--verde); }
 
 /* ===== 4. FRANJA SUPERIOR Y ENCABEZADO ===== */
-.strip { background: var(--noche); color: #d9d9e6; font-size: .8rem; padding: 7px 0; text-align: center; }
+.strip { background: var(--noche); color: #d9d9e6; font-size: .8rem; padding: 7px 20px; text-align: center; display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap; }
+.strip a, .strip button { color: #fff; font: inherit; font-weight: 600; background: transparent; border: 1px solid #5b5c77; border-radius: 999px; padding: 1px 12px; cursor: pointer; text-decoration: none; }
+.strip a:hover, .strip button:hover { border-color: var(--turquesa); color: var(--turquesa); }
+.strip [hidden] { display: none; }
 header.site { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
 .bar { display: flex; align-items: center; gap: 16px; padding: 12px 0; flex-wrap: wrap; }
 .logo { font-size: 1.5rem; font-weight: 800; text-decoration: none; }
@@ -107,7 +107,7 @@ aside.cart h2 { font-size: 1.3rem; margin-bottom: 10px; }
 .total { display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
 form .field { margin-bottom: 10px; }
 form label.l { display: block; font-weight: 600; font-size: .88rem; margin-bottom: 2px; }
-form input[type=text], form input[type=tel], form textarea {
+form input[type=text], form input[type=tel], form input[type=email], form input[type=password], form textarea {
   width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); font: inherit;
 }
 form .hint { font-size: .8rem; color: var(--muted); }
@@ -146,3 +146,9 @@ body.anotar [data-policy]::before {
   content: attr(data-policy); position: absolute; top: -13px; left: 6px; z-index: 30;
   background: var(--red); color: #fff; font: 600 11px/1.5 "Segoe UI", system-ui, sans-serif; padding: 0 8px; border-radius: 999px; white-space: nowrap;
 }
+
+/* ===== 11. INICIO DE SESIÓN Y ESTADO DE COMPRA ===== */
+[hidden] { display: none !important; }
+.login-box { max-width: 420px; margin-top: 12px; }
+#loginMsg { min-height: 1.4em; font-size: .88rem; color: #a3194f; margin: 6px 0; }
+.estado { background: #f8ecfe; border-radius: 10px; padding: 8px 12px; font-size: .85rem; color: #7b1ba0; margin: 0 0 10px; }
